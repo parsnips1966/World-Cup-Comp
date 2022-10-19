@@ -1,0 +1,30 @@
+{% extends "base.html" %}
+
+{% block title %}
+Settings
+{% endblock %}
+
+{% block body %}
+<h1>Profile Settings</h1>
+
+<form class="container content dropzone" method="POST" accept=".jpg,.jpeg,.png,.jfif" enctype="multipart/form-data" action="{{ url_for('settings') }}">
+  <div class="row">
+    <p>Username</p>
+  </div>
+  <div class="row">
+    <input class="no-margin" name="username" type="text" value="{{username}}">
+  </div>
+  <hr>
+  {% set filename = "pfps/" + image %}
+  <div class="row">
+    Profile Picture
+    <img class="pfp" src="{{ url_for('static', filename=filename) }}">
+  </div>
+  <div class="row">
+    <input id="file" name="file" type="file">
+  </div>
+  <input type="submit">
+</form>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/dropzone/5.7.1/min/dropzone.min.js"></script>
+
+{% endblock %}

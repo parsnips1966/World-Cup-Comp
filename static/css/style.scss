@@ -1,0 +1,137 @@
+body {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    background-image: linear-gradient(#cb0033, #da0266);
+    font-family: Arial, Helvetica, sans-serif;
+}
+header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    height: 75px;
+    width: 100%;
+    padding: 20px;
+    background-color: darkslategrey;
+    font-family: Arial, Helvetica, sans-serif;
+}
+label {
+    color: #811331;
+    font-weight: bold;
+}
+h1 {
+    color: white;
+}
+h2 {
+    color: #811331;
+}
+h3 {
+    font-size: 20px;
+}
+img {
+    width: 50px;
+    height: 30px;
+    margin: 10px;
+    border: 1px solid black;
+}
+a {
+    font-size: 15px;
+}
+input {
+    margin-bottom: 20px;
+    text-align: center;
+}
+.content {
+    background-color: white;
+    border-radius: 30px;
+    margin: 20px;
+    padding: 20px;
+}
+#homepage-buttons {
+    width: 50%;
+}
+#profile {
+    display: flex;
+    float: right;
+    color: white;
+    align-items: center;
+}
+.blank-link {
+    font-size: 15px;
+    text-decoration: none;
+    margin: 10px;
+    color: white;
+}
+.blank-link:hover {
+    color: white;
+}
+#footer {
+    position: fixed;
+    bottom: 0;
+    background-color: darkslategray;
+    width: 100%;
+}
+.aligned-center {
+    display: flex;
+    justify-content: center;
+}
+#profile-text {
+    display: flex;
+    flex-direction: column;
+    margin: 10px;
+}
+.pfp {
+  width: 70px;
+  height: 70px;
+  padding: 0;
+}
+#expand {
+    position: fixed;
+    bottom: 0;
+    right: 0;
+}
+#collapse {
+    margin: 0;
+}
+#cinematic-image {
+    border: none;
+    height: 30vw;
+    margin: 10px;
+}
+#current-user {
+    display: flex;
+    flex-direction: column;
+}
+.leaderboard-button {
+    font-size: 15px;
+    text-decoration: none;
+    margin: 10px;
+}
+#profile-info {
+  display: flex;
+  flex-direction: column;
+  background-color: rgb(73, 4, 93);
+  border-radius: 20px;
+  padding: 10px;
+  position: fixed;
+  right: 50px;
+  top: 75px;
+}
+#submit-button {
+  font-size: 20px;
+}
+#profile-info-title {
+  text-decoration: underline;
+  color: #FD0;
+  font-family: Verdana;
+}
+.profile-info-item {
+  color: white;
+}
+.animate__animated.animate__zoomInDown {
+  --animate-duration: 0.5s;
+}
+.animate__animated.animate__zoomOutUp {
+  --animate-duration: 0.5s;
+}

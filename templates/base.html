@@ -1,0 +1,87 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <script src="https://kit.fontawesome.com/50d775d5a2.js" crossorigin="anonymous"></script>
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.0-beta1/dist/css/bootstrap.min.css" rel="stylesheet"
+  integrity="sha384-0evHe/X+R7YkIZDRvuzKMRqM+OrBnVFBL6DOitfPri4tjfHxaWutUpFmBp4vmVor" crossorigin="anonymous">
+  <link rel="stylesheet" href="{{ url_for("static", filename="css/style.css") }}">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css"/>
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/dropzone/5.7.1/min/dropzone.min.css">
+</head>
+  <script>
+    $(document).ready(function() {
+      $("#profile-info").hide()
+      $("#footer").hide()
+      $("#expand").show()
+        $("#expand").click(function() {
+          $("#footer").show()
+          $("#collapse").show()
+        })
+        $("#collapse").click(function() {
+          $(this).show()
+          $("footer").hide()
+        })
+      
+      $(".profile").mouseenter(function() {
+        $("#profile-info").removeClass("animate__animated animate__zoomOutUp")
+        $("#profile-info").addClass("animate__animated animate__zoomInDown")
+        $("#profile-info").show()
+      })
+      
+      $(".profile").mouseleave(function() {
+        $("#profile-info").removeClass("animate__animated animate__zoomInDown")
+        $("#profile-info").addClass("animate__animated animate__zoomOutUp").delay("slow")
+      })
+    })
+  </script>
+  {% block script %} {% endblock %}
+  <title>{% block title %} {% endblock %}</title>
+</head>
+
+<header>
+  <a class="blank-link" href="{{ url_for('submitted') }}">Joseph's Predictor</a>
+  <div class="profile" id="profile">
+    {% if current_user.is_authenticated %}
+    <h3 id="profile-name">{{username}}</h3>
+    <img class="pfp" src="{{ url_for('static', filename='pfps/pfp.png') }}" alt="profile image">
+    <button class="btn btn-primary" id="logout-link"><a class="blank-link" href="{{url_for('logout')}}">Logout</a></button>
+    {% endif %}
+  </div>
+</header>
+
+<div class="profile" id="profile-info">
+  <h3 id="profile-info-title">Profile Info</h3>
+  <p class="profile-info-item">Username: {{username}}</p>
+  <p class="profile-info-item">Score: {{score}}</p>
+  <p class="profile-info-item">Position: {{position}}</p>
+  <button class="btn btn-primary"><a class="blank-link" href="{{ url_for('settings') }}">Settings</a></button>
+</div>
+
+<body>
+  <button class="btn btn-primary" id="expand"><i class="fas fa-chevron-up"></i> More Info</button>
+  {% block body %} {% endblock %}
+</body>
+
+<footer id="footer" class="container-fluid">
+  <div class="row">
+    <div class="col aligned-center">
+      <h3 class="text-white">Contact me for help, feedback or anything else</h3>
+      <button class="btn btn-primary" id="collapse"><i class="fas fa-chevron-down"></i></button>
+    </div>
+  </div>
+  <div class="row justify-content-center">
+    <div class="col-6 aligned-center">
+      <a href="mailto:parsonsjm20@haybridge.worcs.sch.uk?subject=World Cup Predictor" class="blank-link">
+        <i class="fas fa-envelope"></i>email</a>
+    </div>
+    <div class="col-6 aligned-center">
+      <a href="github.com/parsnips1966" class="blank-link"><i class="fas fa-code-branch"></i>GitHub</a>
+    </div>
+  </div>
+</footer>
+
+</html>

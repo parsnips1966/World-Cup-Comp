@@ -1,0 +1,49 @@
+{% extends "base.html" %}
+
+{% block body %}
+<h1 class="white-text">Leaderboard</h1>
+<div class="container content">
+    <div class="row">
+        <div class="col-2 aligned-center">
+            <h2>Position</h2>
+        </div>
+        <div class="col-8 aligned-center">
+            <h2>Username</h2>
+        </div>
+        <div class="col-2 aligned-center">
+            <h2>Points</h2>
+        </div>
+    </div>
+    {% for record in records %}
+        <hr>
+        {% if record.username == username %}
+            <div class="row">
+                <div class="col-2 aligned-center text-success">
+                    {{records.index(record)+1}}
+                </div>
+                <div id="current-user" class="col-8 aligned-center text-success">
+                    <p>{{record.username}}</p>
+                </div>
+                <div class="col-2 aligned-center text-success">
+                    {{record.score}}
+                </div>
+            </div>
+              <div class="aligned-center">
+                <button class="btn btn-primary"><a class="blank-link" href="{{ url_for('submitted') }}">Change Predictions</a></button>
+              </div>
+        {% else %}
+            <div class="row">
+                <div class="col-2 aligned-center">
+                    {{records.index(record)+1}}
+                </div>
+                <div class="col-8 aligned-center">
+                    {{record.username}}
+                </div>
+                <div class="col-2 aligned-center">
+                    {{record.score}}
+                </div>
+            </div>
+        {% endif %}
+    {% endfor %}
+</div>
+{% endblock %}

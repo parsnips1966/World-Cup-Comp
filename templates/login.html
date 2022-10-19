@@ -1,0 +1,41 @@
+{% extends "base.html" %}
+
+{% block title %}
+Login
+{% endblock %}
+
+{% block script %}
+<script>
+$(document).ready(function() {
+  $('#button').prop('disabled', true);
+  $('input').keyup(function() {
+     if($('#email').val() != '' && $('#password').val() != '') {
+        $('button').prop('disabled', false);
+     }
+  });
+});
+</script>
+{% endblock %}
+
+{% block body %}
+<h1>Login</h1>
+<form class="container-fluid content" action="{{ url_for('login') }}" method="POST">
+  <div class="row">
+    <input name="email" type="email" id="email" placeholder="Email">
+  </div>
+  <div class="row">
+    <input name="password" type="password" id="password" placeholder="Password">
+  </div>
+  <div class="row">
+    <p class="text-warning">{{error}}</p>
+  {% if error == "That password is incorrect." %}
+    <a href="mailto:parsonsjm20@haybridge.worcs.sch.uk?subject=World Cup Predictor Password Reset
+    &body=Hey Joseph, please reset my password because I'm a numpty and forgot it!">Forgot Password?</a>
+  {% endif %}
+  </div>
+  <div class="row">
+    <button id="button" class="btn btn-block btn-primary" type="submit"><i class="fas fa-arrow-right-to-bracket"></i>Login</button>
+  </div>
+</form>
+
+{% endblock %}
