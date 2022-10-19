@@ -22,6 +22,7 @@
                     {{records.index(record)+1}}
                 </div>
                 <div id="current-user" class="col-8 aligned-center text-success">
+                    <img src="{{ url_for('static', filename='pfps/'+pfp) }}" alt="Profile Picture">
                     <p>{{record.username}}</p>
                 </div>
                 <div class="col-2 aligned-center text-success">

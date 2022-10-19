@@ -47,7 +47,7 @@
   <div class="profile" id="profile">
     {% if current_user.is_authenticated %}
     <h3 id="profile-name">{{username}}</h3>
-    <img class="pfp" src="{{ url_for('static', filename='pfps/pfp.png') }}" alt="profile image">
+    <img class="pfp" src="{{ url_for('static', filename='pfps/'+pfp) }}" alt="profile image">
     <button class="btn btn-primary" id="logout-link"><a class="blank-link" href="{{url_for('logout')}}">Logout</a></button>
     {% endif %}
   </div>

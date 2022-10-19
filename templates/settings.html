@@ -15,16 +15,15 @@ Settings
     <input class="no-margin" name="username" type="text" value="{{username}}">
   </div>
   <hr>
-  {% set filename = "pfps/" + image %}
   <div class="row">
     Profile Picture
-    <img class="pfp" src="{{ url_for('static', filename=filename) }}">
+    <img class="pfp" src="{{ url_for('static', filename=pfp) }}">
   </div>
   <div class="row">
     <input id="file" name="file" type="file">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/dropzone/5.7.1/min/dropzone.min.js"></script>
   </div>
   <input type="submit">
 </form>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/dropzone/5.7.1/min/dropzone.min.js"></script>
 
 {% endblock %}

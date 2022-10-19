@@ -101,6 +101,8 @@ def login():
 
         elif check_password_hash(user_obj.password, password):
             login_user(user_obj)
+            global pfp
+            pfp = str(current_user.get_id())
             return redirect(url_for("submitted"))
 
         else:
@@ -165,15 +167,15 @@ def submitted():
 
         current_user.predictions = dumps(preDICTions)
         db.session.commit()
-        return render_template("submitted.html", username=username, predictions=preDICTions['payload'], score=current_user.score, position=position)
+        return render_template("submitted.html", username=username, predictions=preDICTions['payload'], score=current_user.score, position=position, pfp=pfp)
 
-    return render_template("groupstages.html", username=username, predictions=preDICTions['payload'], score=current_user.score, countries=groupstagecountries)
+    return render_template("groupstages.html", username=username, predictions=preDICTions['payload'], score=current_user.score, countries=groupstagecountries, pfp=pfp)
 
 @app.route("/leaderboard", methods=['GET', 'POST'])
 @login_required
 def leaderboard():
     sorted_records = User.query.order_by(User.score).all()[::-1]
-    return render_template("leaderboard.html", username=username, score=current_user.score, position=position, records=sorted_records)
+    return render_template("leaderboard.html", username=username, score=current_user.score, position=position, records=sorted_records, pfp=pfp)
 
 
 @app.route("/settings", methods=['GET', 'POST'])
@@ -183,11 +185,17 @@ def settings():
         file = request.files['file']
         filename = secure_filename(file.filename)
         file_ext = os.path.splitext(filename)[1]
-        if file and allowed_file(filename) and file_ext != validate_image(file.stream):
-            file.save(os.path.join("static/pfps", current_user.get_id()))
+        if file:
+            print("file exists")
+        if allowed_file(filename):
+            print("file allowed")
+        if file_ext == validate_image(file.stream):
+            print("image validated")
+        if filename != "" and allowed_file(filename) and file_ext == validate_image(file.stream):
+            file.save(os.path.join("static/pfps", pfp))
             return redirect(url_for('settings'))
         print("Not an accepted file type.")
-    return render_template("settings.html", username=username, score=current_user.score, position=position, image=current_user.image)
+    return render_template("settings.html", username=username, score=current_user.score, position=position, pfp=pfp)
         
 
 @app.route("/logout")
