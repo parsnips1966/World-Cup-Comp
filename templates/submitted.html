@@ -2,17 +2,14 @@
 
 {% block body %}
 <h1 class="white-text">You have submitted your predictions</h1>
-<div class="content container-fluid">
-  <p>They are: {% for i in predictions %} 
-    {{i}}
-    {% endfor %}
-  </p>
-  <div class="aligned-center">
+<div class="content container-fluid half-width">
+  <div class="row">
+    <div class="col-6 aligned-center">
       <button class="btn btn-block btn-primary"><a class="blank-link" href="{{ url_for('submitted') }}">Change Predictions</a></button>
-  </div>
-  <br>
-  <div class="aligned-center">
+    </div>
+    <div class="col-6 aligned-center">
       <button class="btn btn-warning"><a class="blank-link text-dark" href="{{ url_for('leaderboard') }}">Leaderboard</a></button>
-    </div
+    </div>
+  </div>
 </div>
 {% endblock %}}
