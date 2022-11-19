@@ -19,10 +19,11 @@ Predictions
   <form class="container content" action="{{ url_for('submitted') }}" method="POST">
     {% for i in range(0, 4) %}
       {% set number = i*2 %}
-      {% set filename = "images/" + countries[number] + ".png" %}
-      {% set filename2 = "images/" + countries[number+1] + ".png" %}
+      {% set filename = "flags/" + countries[number] + ".png" %}
+      {% set filename2 = "flags/" + countries[number+1] + ".png" %}
       {% set name = "game" + number|string + "-1" %}
       {% set name2 = "game" + number|string + "-2" %}
+      <h2 class="text-center">Quarter Final {{i+1}}</h2>
       <div class="row">
         <div class="col-2 aligned-center">
           <img src="{{ url_for("static", filename=filename) }}">
@@ -32,9 +33,11 @@ Predictions
         </div>
         <div class="col-2 aligned-center">
           <input class="no-margin" name={{name}} type="number" min="0" max="50", value="{{predictions[0]}}">
+          <!-- <p class="no-margin">{{predictions[0]}}</p> -->
         </div>
         <div class="col-2 aligned-center">
           <input class="no-margin" name={{name2}} type="number" min="0" max="50", value="{{predictions[1]}}">
+          <!-- <p class="no-margin">{{predictions[1]}}</p> -->
         </div>
         <div class="col-2 aligned-center">
           <p>{{countries[number+1]}}</p>
@@ -43,6 +46,7 @@ Predictions
           <img src="{{ url_for("static", filename=filename2) }}">
         </div>
       </div>
+      <hr>
     {% endfor %}
     <br>
     <div class="row">

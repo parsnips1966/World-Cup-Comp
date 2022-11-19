@@ -1,5 +1,5 @@
 import os
-from flask import Flask, flash, render_template, request, redirect, url_for
+from flask import Flask, render_template, request, redirect, url_for
 from werkzeug.security import generate_password_hash, check_password_hash
 from werkzeug.utils import secure_filename
 from flask_sqlalchemy import SQLAlchemy
@@ -9,7 +9,7 @@ from json import dumps, loads
 import imghdr
 
 # SETUP
-ALLOWED_EXTENSIONS = {'pdf', 'png', 'jpg', 'jpeg', 'gif'}
+ALLOWED_EXTENSIONS = {'pdf', 'png', 'jpg', 'jpeg'}
 
 app = Flask(__name__)
 app.config["SECRET_KEY"] = "abcxyz"
@@ -39,16 +39,19 @@ login_manager.init_app(app)
 def calculate_score():
     current_user.score = 0
     for i in range(0, 126, 2):
-        if real_scores[i] == preDICTions["payload"][i] and real_scores[i+1] == preDICTions["payload"][i+1]:
-            current_user.score += 3
-        elif real_scores[i] > real_scores[i+1] and preDICTions["payload"][i] > preDICTions["payload"][i+1]:
-            current_user.score += 1
-        elif real_scores[i] < real_scores[i+1] and preDICTions["payload"][i] < preDICTions["payload"][i+1]:
-            current_user.score += 1
-        elif real_scores[i] == real_scores[i+1] and preDICTions["payload"][i] == preDICTions["payload"][i+1]: 
-            current_user.score += 1
+        try:
+            if real_scores[i] == int(preDICTions["payload"][i]) and real_scores[i+1] == int(preDICTions["payload"][i+1]):
+                current_user.score += 3
+            elif real_scores[i] > real_scores[i+1] and int(preDICTions["payload"][i]) > int(preDICTions["payload"][i+1]):
+                current_user.score += 1
+            elif real_scores[i] < real_scores[i+1] and int(preDICTions["payload"][i]) < int(preDICTions["payload"][i+1]):
+                current_user.score += 1
+            elif real_scores[i] == real_scores[i+1] and int(preDICTions["payload"][i]) == int(preDICTions["payload"][i+1]): 
+                current_user.score += 1
+        except:
+            pass
 
-real_scores = [0] * 126
+real_scores = [0, 0]
 groupstagecountries = [
 "Qatar", "Ecuador", "Senegal", "Netherlands", "Qatar", "Senegal", "Netherlands", "Ecuador", "Netherlands", "Qatar", "Ecuador", "Senegal",
 "England", "Iran", "USA", "Wales", "Wales", "Iran", "England", "USA", "Wales", "England", "Iran", "USA", 
@@ -75,7 +78,7 @@ class User(UserMixin, db.Model):
     position = db.Column(db.Integer)
     image = db.Column(db.String(100))
 
-db.create_all()  # This is required on first-time ONLY   
+# db.create_all()  # This is required on first-time ONLY   
 
 @login_manager.user_loader
 def load_user(user_id):
@@ -169,7 +172,7 @@ def submitted():
         db.session.commit()
         return render_template("submitted.html", username=username, predictions=preDICTions['payload'], score=current_user.score, position=position, pfp=pfp)
 
-    return render_template("groupstages.html", username=username, predictions=preDICTions['payload'], score=current_user.score, countries=groupstagecountries, pfp=pfp)
+    return render_template("semifinals.html", username=username, predictions=preDICTions['payload'], score=current_user.score, countries=groupstagecountries, pfp=pfp)
 
 @app.route("/leaderboard", methods=['GET', 'POST'])
 @login_required
