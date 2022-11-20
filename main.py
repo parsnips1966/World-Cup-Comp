@@ -8,7 +8,6 @@ from sqlalchemy.dialects.sqlite.json import JSON
 from json import dumps, loads
 import imghdr
 
-# SETUP
 ALLOWED_EXTENSIONS = {'pdf', 'png', 'jpg', 'jpeg'}
 
 app = Flask(__name__)
@@ -39,7 +38,8 @@ login_manager.init_app(app)
 def calculate_score():
     current_user.score = 0
     for i in range(0, 126, 2):
-        try:
+        if real_scores[i] != -1:
+            print(preDICTions["payload"][i], preDICTions["payload"][i+1])
             if real_scores[i] == int(preDICTions["payload"][i]) and real_scores[i+1] == int(preDICTions["payload"][i+1]):
                 current_user.score += 3
             elif real_scores[i] > real_scores[i+1] and int(preDICTions["payload"][i]) > int(preDICTions["payload"][i+1]):
@@ -48,10 +48,17 @@ def calculate_score():
                 current_user.score += 1
             elif real_scores[i] == real_scores[i+1] and int(preDICTions["payload"][i]) == int(preDICTions["payload"][i+1]): 
                 current_user.score += 1
-        except:
-            pass
 
-real_scores = [0, 0]
+real_scores = [
+#2, 1, 1, 2, 3, 1, 3, 2, 2, 3, 2, 2, 1, 2, 2, 1, 2, 2,
+"-", "-", -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1,
+-1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1,
+-1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1,
+-1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1,
+-1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1,
+-1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1,
+-1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1,
+]
 groupstagecountries = [
 "Qatar", "Ecuador", "Senegal", "Netherlands", "Qatar", "Senegal", "Netherlands", "Ecuador", "Netherlands", "Qatar", "Ecuador", "Senegal",
 "England", "Iran", "USA", "Wales", "Wales", "Iran", "England", "USA", "Wales", "England", "Iran", "USA", 
@@ -78,7 +85,9 @@ class User(UserMixin, db.Model):
     position = db.Column(db.Integer)
     image = db.Column(db.String(100))
 
-# db.create_all()  # This is required on first-time ONLY   
+# Special Operations
+# app.app_context().push()
+# db.create_all()
 
 @login_manager.user_loader
 def load_user(user_id):
@@ -167,12 +176,11 @@ def submitted():
     if request.method == "POST":
         for num, i in enumerate(request.form):
             preDICTions['payload'][num] = request.form[i]
-
         current_user.predictions = dumps(preDICTions)
         db.session.commit()
         return render_template("submitted.html", username=username, predictions=preDICTions['payload'], score=current_user.score, position=position, pfp=pfp)
 
-    return render_template("semifinals.html", username=username, predictions=preDICTions['payload'], score=current_user.score, countries=groupstagecountries, pfp=pfp)
+    return render_template("groupstages.html", username=username, predictions=preDICTions['payload'], score=current_user.score, countries=groupstagecountries, pfp=pfp, real_scores=real_scores)
 
 @app.route("/leaderboard", methods=['GET', 'POST'])
 @login_required

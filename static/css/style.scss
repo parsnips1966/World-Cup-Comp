@@ -135,3 +135,11 @@ input {
 .animate__animated.animate__zoomOutUp {
   --animate-duration: 0.5s;
 }
+.scores-container {
+    display: flex;
+    flex-direction: column;
+}
+.invisible {
+    position: fixed;
+    visibility: hidden;
+}
