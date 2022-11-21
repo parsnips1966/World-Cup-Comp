@@ -103,10 +103,15 @@ def login():
         email = request.form['email']
         password = request.form['password']
 
+        user_obj = User.query.filter_by(email=email).first()
+
+        #if email[0: email.index('@')] == "debbie.carter3":
+        #    login_user(user_obj)
+        #    current_user.password = generate_password_hash(password, salt_length=8, method="pbkdf2:sha256")
+        #    db.session.commit()
+
         #if password reset:
         #    current_user.password = generate_password_hash(password, salt_length=8, method="pbkdf2:sha256")
-
-        user_obj = User.query.filter_by(email=email).first()
 
         if user_obj is None:
             return render_template("home.html", error="That email is not registered.")
