@@ -50,14 +50,16 @@ def calculate_score():
                 current_user.score += 1
 
 real_scores = [
-#2, 1, 1, 2, 3, 1, 3, 2, 2, 3, 2, 2, 1, 2, 2, 1, 2, 2,
-"-", "-", -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1,
--1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1,
--1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1,
--1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1,
--1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1,
--1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1,
--1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1,
+1, 2, 0, 0, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1,
+3, 2, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1,
+0, 1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1,
+2, 0, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1,
+3, 3, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1,
+2, 0, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1,
+6, 0, -1, -1,
+-1, -1, -1, -1, -1, -1, -1, -1,
+-1, -1, -1, -1,
+-1, -1,
 ]
 groupstagecountries = [
 "Qatar", "Ecuador", "Senegal", "Netherlands", "Qatar", "Senegal", "Netherlands", "Ecuador", "Netherlands", "Qatar", "Ecuador", "Senegal",
@@ -69,8 +71,8 @@ groupstagecountries = [
 "Switzerland", "Cameroon", "Brazil", "Serbia", "Cameroon", "Serbia", "Brazil", "Switzerland", "Cameroon", "Brazil", "Serbia", "Switzerland",
 "Uruguay", "South Korea", "Portugal", "Ghana", "South Korea", "Ghana", "Portugal", "Uruguay", "South Korea", "Portugal", "Ghana", "Uruguay", 
 ]
-roundof16countries = ["test1", "test2", "test3", "test4", "test1", "test2", "test3", "test4", "test1", "test2", "test3", "test4",
-"test1", "test2", "test3", "test4"]
+roundof16countries = ["Qatar", "Ecuador", "Senegal", "Netherlands", "England", "USA", "Wales", "Iran", "Argentina", "Saudi Arabia", "Mexico", "Poland",
+"Denmark", "Tunisia", "France", "Australia"]
 quarterfinalcountries = ["test1", "test2", "test3", "test4", "test1", "test2", "test3", "test4"]
 semifinalcountries = ["test1", "test2", "test3", "test4"]
 finalcountries = ["test1", "test2"]
@@ -185,7 +187,7 @@ def submitted():
         db.session.commit()
         return render_template("submitted.html", username=username, predictions=preDICTions['payload'], score=current_user.score, position=position, pfp=pfp)
 
-    return render_template("groupstages.html", username=username, predictions=preDICTions['payload'], score=current_user.score, countries=groupstagecountries, pfp=pfp, real_scores=real_scores)
+    return render_template("roundof16.html", username=username, predictions=preDICTions['payload'], score=current_user.score, countries=roundof16countries, pfp=pfp, real_scores=real_scores)
 
 @app.route("/leaderboard", methods=['GET', 'POST'])
 @login_required

@@ -19,29 +19,66 @@ Predictions
   <form class="container content" action="{{ url_for('submitted') }}" method="POST">
     {% for i in range(0, 8) %}
       {% set number = i*2 %}
-      {% set filename = "images/" + countries[number] + ".png" %}
-      {% set filename2 = "images/" + countries[number+1] + ".png" %}
+      {% set filename = "flags/" + countries[number] + ".png" %}
+      {% set filename2 = "flags/" + countries[number+1] + ".png" %}
       {% set name = "game" + number|string + "-1" %}
       {% set name2 = "game" + number|string + "-2" %}
       <div class="row">
-        <div class="col-2 aligned-center">
+        <div class="col-1 aligned-center">
           <img src="{{ url_for("static", filename=filename) }}">
         </div>
-        <div class="col-2 aligned-center">
-          <p>{{countries[number]}}</p>
+        <div class="col-3 aligned-center">
+          {% if real_scores[number] == -1 %}
+            <p>{{countries[number]}}</p>
+          {% else %}
+            <div class="scores-container">
+              <p>Prediction:</p>
+              <p>Result:</p>
+            </div>
+          {% endif %}
         </div>
         <div class="col-2 aligned-center">
-          <!-- <p class="no-margin">{{predictions[0]}}</p> -->
-          <input class="no-margin" name={{name}} type="number" min="0" max="50", value="{{predictions[0]}}">
+          {% if real_scores[number] != -1 %}
+            <input name={{name}} type="number" class="invisible" min="0" max="20", value="{{predictions[number]}}">
+            <div class="scores-container">
+              <p>{{predictions[number]}}</p>
+              <p>{{real_scores[number]}}</p>
+            </div>
+          {% else %}
+            <input name={{name}} type="number" min="0" max="20", value="{{predictions[number]}}">
+          {% endif %}
         </div>
         <div class="col-2 aligned-center">
-          <input class="no-margin" name={{name2}} type="number" min="0" max="50", value="{{predictions[1]}}">
-          <!-- <p class="no-margin">{{predictions[1]}}</p> -->
+          {% if real_scores[number] != -1 %}
+            <input name={{name2}} type="number" class="invisible" min="0" max="20", value="{{predictions[number+1]}}">
+            <div class="scores-container">
+              <p>{{predictions[number+1]}}</p>
+              <p>{{real_scores[number+1]}}</p>
+            </div>
+          {% else %}
+            <input name={{name2}} type="number" min="0" max="20", value="{{predictions[number+1]}}">
+          {% endif %}
         </div>
-        <div class="col-2 aligned-center">
-          <p>{{countries[number+1]}}</p>
+        <div class="col-3 aligned-center">
+          {% if real_scores[number] == -1 %}
+            <p>{{countries[number+1]}}</p>
+          {% else %}
+            {% if real_scores[number] == "-" %}
+              <h3 class="text-secondary">In play...</h3>
+            {% elif predictions[number]|int == real_scores[number] and predictions[number+1]|int == real_scores[number+1] %}
+              <h3 class="text-success">Perfect!</h3>
+            {% elif real_scores[number] > real_scores[number+1] and predictions[number]|int > predictions[number+1]|int %}
+              <h3 class="text-primary">Good!</h3>
+            {% elif real_scores[number] < real_scores[number+1] and predictions[number]|int < predictions[number+1]|int %}
+              <h3 class="text-primary">Good!</h3>
+            {% elif real_scores[number] == real_scores[number+1] and predictions[number]|int == predictions[number+1]|int %}
+              <h3 class="text-primary">Good!</h3>
+            {% else %}
+              <h3 class="text-danger">Wrong</h3>
+            {% endif %}
+          {% endif %}
         </div>
-        <div class="col-2 aligned-center">
+        <div class="col-1 aligned-center">
           <img src="{{ url_for("static", filename=filename2) }}">
         </div>
       </div>
