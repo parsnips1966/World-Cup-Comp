@@ -50,18 +50,32 @@ def calculate_score():
                 current_user.score += 1
 
 real_scores = [
-1, 2, 0, 0, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1,
-3, 2, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1,
-0, 1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1,
-2, 0, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1,
-3, 3, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1,
-2, 0, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1,
-6, 0, -1, -1,
--1, -1, -1, -1, -1, -1, -1, -1,
--1, -1, -1, -1,
--1, -1,
+#Group A
+0, 0,  0, 0,  0, 0,  0, 0,  0, 0,  0, 0,
+#Group B
+0, 0,  0, 0,  0, 0,  0, 0,  0, 0,  0, 0,
+#Group C
+0, 0,  0, 0,  0, 0,  0, 0,  0, 0,  0, 0,
+#Group D
+0, 0,  0, 0,  0, 0,  0, 0,  0, 0,  0, 0,
+#Group E
+0, 0,  0, 0,  0, 0,  0, 0,  0, 0,  0, 0,
+#Group F
+0, 0,  0, 0,  0, 0,  0, 0,  0, 0,  0, 0,
+#Group G
+0, 0,  0, 0,  0, 0,  0, 0,  0, 0,  0, 0,
+#Group H
+0, 0,  0, 0,  0, 0,  0, 0,  0, 0,  0, 0,
+#Round of 16
+2, 1,  0, 0,  -1, -1,  -1, -1,  -1, -1,  -1, -1,  -1, -1,  -1, -1,
+#Quarter Finals
+-1, -1,  -1, -1,  -1, -1,  -1, -1,
+#Semi Finals
+-1, -1,  -1, -1,
+#Final
+-1, -1
 ]
-groupstagecountries = [
+countries = [
 "Qatar", "Ecuador", "Senegal", "Netherlands", "Qatar", "Senegal", "Netherlands", "Ecuador", "Netherlands", "Qatar", "Ecuador", "Senegal",
 "England", "Iran", "USA", "Wales", "Wales", "Iran", "England", "USA", "Wales", "England", "Iran", "USA", 
 "Argentina", "Saudi Arabia", "Mexico", "Poland", "Poland", "Saudi Arabia", "Argentina", "Mexico", "Poland", "Argentina", "Saudi Arabia", "Mexico",
@@ -69,13 +83,11 @@ groupstagecountries = [
 "Germany", "Japan", "Spain", "Costa Rica", "Japan", "Costa Rica", "Spain", "Germany", "Japan", "Spain", "Costa Rica", "Germany",
 "Morocco", "Croatia", "Belgium", "Canada", "Belgium", "Morocco", "Croatia", "Canada", "Croatia", "Belgium", "Canada", "Morocco",
 "Switzerland", "Cameroon", "Brazil", "Serbia", "Cameroon", "Serbia", "Brazil", "Switzerland", "Cameroon", "Brazil", "Serbia", "Switzerland",
-"Uruguay", "South Korea", "Portugal", "Ghana", "South Korea", "Ghana", "Portugal", "Uruguay", "South Korea", "Portugal", "Ghana", "Uruguay", 
+"Uruguay", "South Korea", "Portugal", "Ghana", "South Korea", "Ghana", "Portugal", "Uruguay", "South Korea", "Portugal", "Ghana", "Uruguay",
+#Round of 16
+"Qatar", "Ecuador", "Senegal", "Netherlands", "England", "USA", "Wales", "Iran", "Argentina", "Saudi Arabia", "Mexico", "Poland",
+"Denmark", "Tunisia", "France", "Australia"
 ]
-roundof16countries = ["Qatar", "Ecuador", "Senegal", "Netherlands", "England", "USA", "Wales", "Iran", "Argentina", "Saudi Arabia", "Mexico", "Poland",
-"Denmark", "Tunisia", "France", "Australia"]
-quarterfinalcountries = ["test1", "test2", "test3", "test4", "test1", "test2", "test3", "test4"]
-semifinalcountries = ["test1", "test2", "test3", "test4"]
-finalcountries = ["test1", "test2"]
 
 class User(UserMixin, db.Model):
     id = db.Column(db.Integer, primary_key=True)
@@ -187,11 +199,12 @@ def submitted():
         db.session.commit()
         return render_template("submitted.html", username=username, predictions=preDICTions['payload'], score=current_user.score, position=position, pfp=pfp)
 
-    return render_template("roundof16.html", username=username, predictions=preDICTions['payload'], score=current_user.score, countries=roundof16countries, pfp=pfp, real_scores=real_scores)
+    return render_template("roundof16.html", username=username, predictions=preDICTions['payload'], score=current_user.score, countries=countries, pfp=pfp, real_scores=real_scores)
 
 @app.route("/leaderboard", methods=['GET', 'POST'])
 @login_required
 def leaderboard():
+    calculate_score()
     sorted_records = User.query.order_by(User.score).all()[::-1]
     return render_template("leaderboard.html", username=username, score=current_user.score, position=position, records=sorted_records, pfp=pfp)
 
