@@ -67,7 +67,7 @@ real_scores = [
 #Group H
 0, 0,  0, 0,  0, 0,  0, 0,  0, 0,  0, 0,
 #Round of 16
-2, 1,  0, 0,  -1, -1,  -1, -1,  -1, -1,  -1, -1,  -1, -1,  -1, -1,
+2, 1,  0, 0,  0, 0,  -1, -1,  -1, -1,  -1, -1,  -1, -1,  -1, -1,
 #Quarter Finals
 -1, -1,  -1, -1,  -1, -1,  -1, -1,
 #Semi Finals
@@ -76,17 +76,23 @@ real_scores = [
 -1, -1
 ]
 countries = [
+#group stages
 "Qatar", "Ecuador", "Senegal", "Netherlands", "Qatar", "Senegal", "Netherlands", "Ecuador", "Netherlands", "Qatar", "Ecuador", "Senegal",
-"England", "Iran", "USA", "Wales", "Wales", "Iran", "England", "USA", "Wales", "England", "Iran", "USA", 
+"England", "Iran", "USA", "Wales", "Wales", "Iran", "England", "USA", "Wales", "England", "Iran", "USA",
 "Argentina", "Saudi Arabia", "Mexico", "Poland", "Poland", "Saudi Arabia", "Argentina", "Mexico", "Poland", "Argentina", "Saudi Arabia", "Mexico",
 "Denmark", "Tunisia", "France", "Australia", "Tunisia", "Australia", "France", "Denmark", "Tunisia", "France", "Australia", "Denmark",
 "Germany", "Japan", "Spain", "Costa Rica", "Japan", "Costa Rica", "Spain", "Germany", "Japan", "Spain", "Costa Rica", "Germany",
 "Morocco", "Croatia", "Belgium", "Canada", "Belgium", "Morocco", "Croatia", "Canada", "Croatia", "Belgium", "Canada", "Morocco",
 "Switzerland", "Cameroon", "Brazil", "Serbia", "Cameroon", "Serbia", "Brazil", "Switzerland", "Cameroon", "Brazil", "Serbia", "Switzerland",
 "Uruguay", "South Korea", "Portugal", "Ghana", "South Korea", "Ghana", "Portugal", "Uruguay", "South Korea", "Portugal", "Ghana", "Uruguay",
-#Round of 16
-"Qatar", "Ecuador", "Senegal", "Netherlands", "England", "USA", "Wales", "Iran", "Argentina", "Saudi Arabia", "Mexico", "Poland",
-"Denmark", "Tunisia", "France", "Australia"
+#round of 16
+"Netherlands", "USA", "Argentina", "Australia", "France", "Poland", "England", "Senegal", "Japan", "Croatia", "Brazil", "South Korea", "Morocco", "Spain", "Portugal", "Switzerland",
+#quarter finals
+"test1", "test2", "test3", "test4", "test1", "test2", "test3", "test4",
+#semi finals
+"test1", "test2", "test3", "test4",
+#final
+"test1", "test2"
 ]
 
 class User(UserMixin, db.Model):
@@ -307,7 +313,7 @@ def submitted():
         db.session.commit()
         return render_template("submitted.html", username=username, predictions=preDICTions['payload'], score=current_user.score, position=position, pfp=pfp)
 
-    return render_template("groupstages.html", username=username, predictions=preDICTions['payload'], score=current_user.score, countries=countries, pfp=pfp, real_scores=real_scores)
+    return render_template("roundof16.html", username=username, predictions=preDICTions['payload'], score=current_user.score, countries=countries, pfp=pfp, real_scores=real_scores)
 
 @app.route("/leaderboard", methods=['GET', 'POST'])
 @login_required
