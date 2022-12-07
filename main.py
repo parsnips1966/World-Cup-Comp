@@ -88,7 +88,7 @@ countries = [
 #round of 16
 "Netherlands", "USA", "Argentina", "Australia", "France", "Poland", "England", "Senegal", "Japan", "Croatia", "Brazil", "South Korea", "Morocco", "Spain", "Portugal", "Switzerland",
 #quarter finals
-"test1", "test2", "test3", "test4", "test1", "test2", "test3", "test4",
+"Croatia", "Brazil", "Netherlands", "Argentina", "Morocco", "Portugal", "England", "France",
 #semi finals
 "test1", "test2", "test3", "test4",
 #final
@@ -196,105 +196,9 @@ def submitted():
     preDICTions = loads(current_user.predictions)
 
     #FIX SCORES
-    if username == "parsnip1966":
-        preDICTions["payload"][0] = 0
-        preDICTions["payload"][1] = 0
-        preDICTions["payload"][2] = 0
-        preDICTions["payload"][3] = 0
-        preDICTions["payload"][4] = 0
-        preDICTions["payload"][5] = 0
-        preDICTions["payload"][6] = 0
-        preDICTions["payload"][7] = 0
-        preDICTions["payload"][8] = 0
-        preDICTions["payload"][9] = 0
-        preDICTions["payload"][10] = 0
-        preDICTions["payload"][11] = 0
-        preDICTions["payload"][12] = 0
-        preDICTions["payload"][13] = 0
-        preDICTions["payload"][14] = 0
-        preDICTions["payload"][15] = 0
-        preDICTions["payload"][16] = 0
-        preDICTions["payload"][17] = 0
-        preDICTions["payload"][18] = 0
-        preDICTions["payload"][19] = 0
-        preDICTions["payload"][20] = 0
-        preDICTions["payload"][21] = 0
-        preDICTions["payload"][22] = 0
-        preDICTions["payload"][23] = 0
-        preDICTions["payload"][24] = 0
-        preDICTions["payload"][25] = 0
-        preDICTions["payload"][26] = 0
-        preDICTions["payload"][27] = 0
-        preDICTions["payload"][28] = 0
-        preDICTions["payload"][29] = 0
-        preDICTions["payload"][30] = 0
-        preDICTions["payload"][31] = 0
-        preDICTions["payload"][32] = 0
-        preDICTions["payload"][33] = 0
-        preDICTions["payload"][34] = 0
-        preDICTions["payload"][35] = 0
-        preDICTions["payload"][36] = 0
-        preDICTions["payload"][37] = 0
-        preDICTions["payload"][38] = 0
-        preDICTions["payload"][39] = 0
-        preDICTions["payload"][40] = 0
-        preDICTions["payload"][41] = 0
-        preDICTions["payload"][42] = 0
-        preDICTions["payload"][43] = 0
-        preDICTions["payload"][44] = 0
-        preDICTions["payload"][45] = 0
-        preDICTions["payload"][46] = 0
-        preDICTions["payload"][47] = 0
-        preDICTions["payload"][48] = 0
-        preDICTions["payload"][49] = 0
-        preDICTions["payload"][50] = 0
-        preDICTions["payload"][51] = 0
-        preDICTions["payload"][52] = 0
-        preDICTions["payload"][53] = 0
-        preDICTions["payload"][54] = 0
-        preDICTions["payload"][55] = 0
-        preDICTions["payload"][56] = 0
-        preDICTions["payload"][57] = 0
-        preDICTions["payload"][58] = 0
-        preDICTions["payload"][59] = 0
-        preDICTions["payload"][60] = 0
-        preDICTions["payload"][61] = 0
-        preDICTions["payload"][62] = 0
-        preDICTions["payload"][63] = 0
-        preDICTions["payload"][64] = 0
-        preDICTions["payload"][65] = 0
-        preDICTions["payload"][66] = 0
-        preDICTions["payload"][67] = 0
-        preDICTions["payload"][68] = 0
-        preDICTions["payload"][69] = 0
-        preDICTions["payload"][70] = 0
-        preDICTions["payload"][71] = 0
-        preDICTions["payload"][72] = 0
-        preDICTions["payload"][73] = 0
-        preDICTions["payload"][74] = 0
-        preDICTions["payload"][75] = 0
-        preDICTions["payload"][76] = 0
-        preDICTions["payload"][77] = 0
-        preDICTions["payload"][78] = 0
-        preDICTions["payload"][79] = 0
-        preDICTions["payload"][80] = 0
-        preDICTions["payload"][81] = 0
-        preDICTions["payload"][82] = 0
-        preDICTions["payload"][83] = 0
-        preDICTions["payload"][84] = 0
-        preDICTions["payload"][85] = 0
-        preDICTions["payload"][86] = 0
-        preDICTions["payload"][87] = 0
-        preDICTions["payload"][88] = 0
-        preDICTions["payload"][89] = 0
-        preDICTions["payload"][90] = 0
-        preDICTions["payload"][91] = 0
-        preDICTions["payload"][92] = 0
-        preDICTions["payload"][93] = 0
-        preDICTions["payload"][94] = 0
-        preDICTions["payload"][95] = 0
-        preDICTions["payload"][96] = 0      
-
+    if username == "parsnip1966no":
+        for i in range(96):
+            preDICTions["payload"][i] = 0
         preDICTions['payload'][8] = 2
         preDICTions['payload'][9] = 0
         preDICTions['payload'][10] = 1
@@ -313,7 +217,7 @@ def submitted():
         db.session.commit()
         return render_template("submitted.html", username=username, predictions=preDICTions['payload'], score=current_user.score, position=position, pfp=pfp)
 
-    return render_template("roundof16.html", username=username, predictions=preDICTions['payload'], score=current_user.score, countries=countries, pfp=pfp, real_scores=real_scores)
+    return render_template("quarterfinals.html", username=username, predictions=preDICTions['payload'], score=current_user.score, countries=countries, pfp=pfp, real_scores=real_scores)
 
 @app.route("/leaderboard", methods=['GET', 'POST'])
 @login_required
