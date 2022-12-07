@@ -38,8 +38,18 @@ login_manager.init_app(app)
 def calculate_score():
     current_user.score = 0
     for i in range(0, 126, 2):
-        if real_scores[i] != -1:
-            print(preDICTions["payload"][i], preDICTions["payload"][i+1])
+        if real_scores[i] == -1:
+            pass
+        elif i > 111:
+            if real_scores[i] == int(preDICTions["payload"][i]) and real_scores[i+1] == int(preDICTions["payload"][i+1]):
+                current_user.score += 6
+            elif real_scores[i] > real_scores[i+1] and int(preDICTions["payload"][i]) > int(preDICTions["payload"][i+1]):
+                current_user.score += 2
+            elif real_scores[i] < real_scores[i+1] and int(preDICTions["payload"][i]) < int(preDICTions["payload"][i+1]):
+                current_user.score += 2
+            elif real_scores[i] == real_scores[i+1] and int(preDICTions["payload"][i]) == int(preDICTions["payload"][i+1]):
+                current_user.score += 2
+        else:
             if real_scores[i] == int(preDICTions["payload"][i]) and real_scores[i+1] == int(preDICTions["payload"][i+1]):
                 current_user.score += 3
             elif real_scores[i] > real_scores[i+1] and int(preDICTions["payload"][i]) > int(preDICTions["payload"][i+1]):
@@ -69,7 +79,7 @@ real_scores = [
 #Round of 16
 2, 1,  0, 0,  0, 0,  -1, -1,  -1, -1,  -1, -1,  -1, -1,  -1, -1,
 #Quarter Finals
--1, -1,  -1, -1,  -1, -1,  -1, -1,
+0, 0,  1, 1,  0, 0,  1, 1,
 #Semi Finals
 -1, -1,  -1, -1,
 #Final
