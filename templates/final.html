@@ -18,14 +18,14 @@ Predictions
   <h1 class="white-text">Hello {{username}}! Input your predictions.</h1>
   <button class="btn btn-warning"><a class="blank-link text-dark" href="{{ url_for('leaderboard') }}">Leaderboard</a></button>
   <form class="container content" action="{{ url_for('submitted') }}" method="POST">
-    {% for i in range(62) %}
+    {% for i in range(63) %}
       {% set number = i*2 %}
       {% set filename = "flags/" + countries[number] + ".png" %}
       {% set filename2 = "flags/" + countries[number+1] + ".png" %}
       {% set name = "game" + number|string + "-1" %}
       {% set name2 = "game" + number|string + "-2" %}
-      {% if number > 119 %}
-        <h2 class="text-center">Semi Final {{i-59}}</h2>
+      {% if number > 123 %}
+        <h2 class="text-center">Final</h2>
         <div class="row">
           <div class="col-1 aligned-center">
             <img src="{{ url_for("static", filename=filename) }}">

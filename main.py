@@ -81,7 +81,7 @@ real_scores = [
 #Quarter Finals
 0, 0,  1, 1,  0, 0,  1, 1,
 #Semi Finals
--1, -1,  -1, -1,
+1, 0,  -1, -1,
 #Final
 -1, -1
 ]
@@ -100,9 +100,9 @@ countries = [
 #quarter finals
 "Croatia", "Brazil", "Netherlands", "Argentina", "Morocco", "Portugal", "England", "France",
 #semi finals
-"test1", "test2", "test3", "test4",
+"Argentina", "Croatia", "France", "Morocco",
 #final
-"test1", "test2"
+"Argentina", "France"
 ]
 
 class User(UserMixin, db.Model):
@@ -227,7 +227,7 @@ def submitted():
         db.session.commit()
         return render_template("submitted.html", username=username, predictions=preDICTions['payload'], score=current_user.score, position=position, pfp=pfp)
 
-    return render_template("quarterfinals.html", username=username, predictions=preDICTions['payload'], score=current_user.score, countries=countries, pfp=pfp, real_scores=real_scores)
+    return render_template("final.html", username=username, predictions=preDICTions['payload'], score=current_user.score, countries=countries, pfp=pfp, real_scores=real_scores)
 
 @app.route("/leaderboard", methods=['GET', 'POST'])
 @login_required
