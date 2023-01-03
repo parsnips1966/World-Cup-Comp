@@ -8,6 +8,7 @@ from sqlalchemy.dialects.sqlite.json import JSON
 from json import dumps, loads
 import imghdr
 
+# SETUP
 ALLOWED_EXTENSIONS = {'pdf', 'png', 'jpg', 'jpeg'}
 
 app = Flask(__name__)
@@ -16,7 +17,7 @@ app.config["SQLALCHEMY_DATABASE_URI"] = "sqlite:///users.db"
 app.config["SQLALCHEMY_TRACK_MODIFICATIONS"] = False
 app.config['UPLOAD_FOLDER'] = 'static/pfps'
 app.config['MAX_CONTENT_LENGTH'] = 16 * 1024 * 1024
-app.debug = True
+app.debug = False
 
 def allowed_file(file):
     return '.' in file and \
@@ -40,6 +41,15 @@ def calculate_score():
     for i in range(0, 126, 2):
         if real_scores[i] == -1:
             pass
+        elif i > 123:
+            if real_scores[i] == int(preDICTions["payload"][i]) and real_scores[i+1] == int(preDICTions["payload"][i+1]):
+                current_user.score += 9
+            elif real_scores[i] > real_scores[i+1] and int(preDICTions["payload"][i]) > int(preDICTions["payload"][i+1]):
+                current_user.score += 3
+            elif real_scores[i] < real_scores[i+1] and int(preDICTions["payload"][i]) < int(preDICTions["payload"][i+1]):
+                current_user.score += 3
+            elif real_scores[i] == real_scores[i+1] and int(preDICTions["payload"][i]) == int(preDICTions["payload"][i+1]):
+                current_user.score += 3
         elif i > 111:
             if real_scores[i] == int(preDICTions["payload"][i]) and real_scores[i+1] == int(preDICTions["payload"][i+1]):
                 current_user.score += 6
@@ -56,34 +66,36 @@ def calculate_score():
                 current_user.score += 1
             elif real_scores[i] < real_scores[i+1] and int(preDICTions["payload"][i]) < int(preDICTions["payload"][i+1]):
                 current_user.score += 1
-            elif real_scores[i] == real_scores[i+1] and int(preDICTions["payload"][i]) == int(preDICTions["payload"][i+1]): 
+            elif real_scores[i] == real_scores[i+1] and int(preDICTions["payload"][i]) == int(preDICTions["payload"][i+1]):
                 current_user.score += 1
+    if username == "danieldewhirst":
+        current_user.score -= 3
 
 real_scores = [
 #Group A
-0, 0,  0, 0,  0, 0,  0, 0,  0, 0,  0, 0,
+0, 2,  0, 2,  1, 3,  1, 1,  2, 0,  1, 2,
 #Group B
-0, 0,  0, 0,  0, 0,  0, 0,  0, 0,  0, 0,
+6, 2,  1, 1,  0, 2,  0, 0,  0, 3,  0, 1,
 #Group C
-0, 0,  0, 0,  0, 0,  0, 0,  0, 0,  0, 0,
+1, 2,  0, 0,  2, 0,  2, 0,  0, 2,  1, 2,
 #Group D
-0, 0,  0, 0,  0, 0,  0, 0,  0, 0,  0, 0,
+0, 0,  4, 1,  0, 1,  2, 1,  1, 0,  1, 0,
 #Group E
-0, 0,  0, 0,  0, 0,  0, 0,  0, 0,  0, 0,
+1, 2,  7, 0,  0, 1,  1, 1,  2, 1,  2, 4,
 #Group F
-0, 0,  0, 0,  0, 0,  0, 0,  0, 0,  0, 0,
+0, 0,  1, 0,  0, 2,  4, 1,  0, 0,  1, 2,
 #Group G
-0, 0,  0, 0,  0, 0,  0, 0,  0, 0,  0, 0,
+1, 0,  2, 0,  3, 3,  1, 0,  1, 0,  2, 3,
 #Group H
-0, 0,  0, 0,  0, 0,  0, 0,  0, 0,  0, 0,
+0, 0,  3, 2,  2, 3,  2, 0,  2, 1,  0, 2,
 #Round of 16
-2, 1,  0, 0,  0, 0,  -1, -1,  -1, -1,  -1, -1,  -1, -1,  -1, -1,
+3, 1,  2, 1,  3, 1,  3, 0,  1, 1,  4, 1,  0, 0,  6, 1,
 #Quarter Finals
-0, 0,  1, 1,  0, 0,  1, 1,
+1, 1,  2, 2,  1, 0,  1, 2,
 #Semi Finals
-1, 0,  -1, -1,
+3, 0,  2, 0,
 #Final
--1, -1
+3, 3,
 ]
 countries = [
 #group stages
@@ -115,9 +127,15 @@ class User(UserMixin, db.Model):
     position = db.Column(db.Integer)
     image = db.Column(db.String(100))
 
+#temporary default profile picture
+pfp = "pfp.png"
+
 # Special Operations
+
 # app.app_context().push()
 # db.create_all()
+# User.query.delete(nothing)
+# db.session.commit()
 
 @login_manager.user_loader
 def load_user(user_id):
@@ -125,7 +143,7 @@ def load_user(user_id):
 
 @app.route("/")
 def home():
-    return render_template("home.html")
+    return render_template("home.html", pfp=pfp)
 
 @app.route("/login", methods=['GET', 'POST'])
 def login():
@@ -135,24 +153,23 @@ def login():
 
         user_obj = User.query.filter_by(email=email).first()
 
+        #RESET PASSWORD
         #if email[0: email.index('@')] == "debbie.carter3":
         #    login_user(user_obj)
         #    current_user.password = generate_password_hash(password, salt_length=8, method="pbkdf2:sha256")
         #    db.session.commit()
 
         if user_obj is None:
-            return render_template("home.html", error="That email is not registered.")
+            return render_template("home.html", error="That email is not registered.", pfp=pfp)
 
         elif check_password_hash(user_obj.password, password):
             login_user(user_obj)
-            global pfp
-            pfp = str(current_user.get_id())
             return redirect(url_for("submitted"))
 
         else:
-            return render_template("login.html", error="That password is incorrect.")
+            return render_template("login.html", error="That password is incorrect.", pfp=pfp)
 
-    return render_template("login.html")
+    return render_template("login.html", pfp=pfp)
 
 @app.route("/signup", methods=['GET', 'POST'])
 def signup():
@@ -164,25 +181,25 @@ def signup():
         confirm_password = request.form['confirm-password']
 
         if User.query.filter_by(email=email).first() is not None:
-            return render_template("signup.html", error="That email is already in use, please login or use another one.")
+            return render_template("signup.html", error="That email is already in use, please login or use another one.", pfp=pfp)
 
         if password != confirm_password:
-            return render_template("signup.html", error="The password does not match the confirmation password.")
+            return render_template("signup.html", error="The password does not match the confirmation password.", pfp=pfp)
 
         preDICTions = {"payload": [0] * 126}
-      
+
         user = User(
             email=email, username=username, password=generate_password_hash(password, salt_length=8, method="pbkdf2:sha256"), predictions=dumps(preDICTions),
-            score=0, position=0, image="pfp.png"
+            score=0, position=0, image=pfp
         )
 
-        db.session.add(user)  # Add user temporarily
-        db.session.commit()  # Add user permanently
+        db.session.add(user)
+        db.session.commit()
 
         login_user(user)
         return redirect(url_for("submitted"))
 
-    return render_template("signup.html")
+    return render_template("signup.html", pfp=pfp)
 
 @app.route("/forgotpassword", methods=['GET', 'POST'])
 def forgotpassword():
@@ -204,19 +221,26 @@ def submitted():
     username = current_user.username
     position = current_user.position
     preDICTions = loads(current_user.predictions)
-
-    #FIX SCORES
-    if username == "parsnip1966no":
+    if username == "lynnclarke94s":
         for i in range(96):
             preDICTions["payload"][i] = 0
+        preDICTions['payload'][0] = 0
+        preDICTions['payload'][1] = 2
+        preDICTions['payload'][4] = 1
+        preDICTions['payload'][5] = 3
         preDICTions['payload'][8] = 2
         preDICTions['payload'][9] = 0
-        preDICTions['payload'][10] = 1
+        preDICTions['payload'][10] = 2
         preDICTions['payload'][11] = 2
         preDICTions['payload'][20] = 0
-        preDICTions['payload'][21] = 3
-        preDICTions['payload'][22] = 0
+        preDICTions['payload'][21] = 0
+        preDICTions['payload'][22] = 1
         preDICTions['payload'][23] = 1
+        current_user.predictions = dumps(preDICTions)
+        db.session.commit()
+    elif username == "danieldewhirst10":
+        preDICTions['payload'][20] = 1
+        preDICTions['payload'][21] = 0
         current_user.predictions = dumps(preDICTions)
         db.session.commit()
     calculate_score()
@@ -227,15 +251,16 @@ def submitted():
         db.session.commit()
         return render_template("submitted.html", username=username, predictions=preDICTions['payload'], score=current_user.score, position=position, pfp=pfp)
 
-    return render_template("final.html", username=username, predictions=preDICTions['payload'], score=current_user.score, countries=countries, pfp=pfp, real_scores=real_scores)
+    return render_template("finals.html", username=username, predictions=preDICTions['payload'], score=current_user.score, countries=countries, pfp=pfp, real_scores=real_scores)
 
 @app.route("/leaderboard", methods=['GET', 'POST'])
 @login_required
 def leaderboard():
     calculate_score()
+    current_user.predictions = dumps(preDICTions)
+    db.session.commit()
     sorted_records = User.query.order_by(User.score).all()[::-1]
     return render_template("leaderboard.html", username=username, score=current_user.score, position=position, records=sorted_records, pfp=pfp)
-
 
 @app.route("/settings", methods=['GET', 'POST'])
 @login_required
@@ -255,7 +280,6 @@ def settings():
             return redirect(url_for('settings'))
         print("Not an accepted file type.")
     return render_template("settings.html", username=username, score=current_user.score, position=position, pfp=pfp)
-        
 
 @app.route("/logout")
 @login_required
